@@ -1,57 +1,57 @@
-2016-06-22-12:50:28  Reading input records from 'demo_output_name_val.csv'.
+2016-06-23-12:37:29  Reading input records from 'demo_output_name_val.csv'
 
-2016-06-22-12:50:28  Reading input record '41812057'.
-2016-06-22-12:50:28  Checking if eventDate value is Empty: 'NO'.
-2016-06-22-12:50:28  Trying self_check ISO_date_format-(YYYY-MM-DD) EXACT match for validating eventDate: '5/27/50'.
-2016-06-22-12:50:28  EXACT match was FAILED, compliant with ISO_date_format-(YYYY-MM-DD): FAILED
-2016-06-22-12:50:28  UPDATING record '41812057': eventDate from '5/27/50' to '1950-05-27'.
-2016-06-22-12:50:28  ACCEPTED the record '41812057'.
+2016-06-23-12:37:29  Reading input record '17386437'
+2016-06-23-12:37:29  Checking if eventDate value is Empty: 'NO'
+2016-06-23-12:37:29  Trying self_check ISO_date_format-(YYYY-MM-DD) EXACT match for validating eventDate: '5/27/50'
+2016-06-23-12:37:29  EXACT match was FAILED, compliant with ISO_date_format-(YYYY-MM-DD): FAILED
+2016-06-23-12:37:29  UPDATING record '17386437': eventDate from '5/27/50' to '1950-05-27'
+2016-06-23-12:37:29  ACCEPTED the record '17386437'
 
-2016-06-22-12:50:28  Reading input record '80676332'.
-2016-06-22-12:50:28  Checking if eventDate value is Empty: 'NO'.
-2016-06-22-12:50:28  Trying self_check ISO_date_format-(YYYY-MM-DD) EXACT match for validating eventDate: '1880-01-01/1880-12-31'.
-2016-06-22-12:50:28  EXACT match was SUCESSFUL, compliant with ISO_date_format-(YYYY-MM-DD): SUCCESSFUL
-2016-06-22-12:50:28  ACCEPTED the record '80676332'.
+2016-06-23-12:37:29  Reading input record '10026213'
+2016-06-23-12:37:29  Checking if eventDate value is Empty: 'NO'
+2016-06-23-12:37:29  Trying self_check ISO_date_format-(YYYY-MM-DD) EXACT match for validating eventDate: '1880-01-01/1880-12-31'
+2016-06-23-12:37:29  EXACT match was SUCESSFUL, compliant with ISO_date_format-(YYYY-MM-DD): SUCCESSFUL
+2016-06-23-12:37:29  ACCEPTED the record '10026213'
 
-2016-06-22-12:50:28  Reading input record '75849189'.
-2016-06-22-12:50:28  Checking if eventDate value is Empty: 'NO'.
-2016-06-22-12:50:28  Trying self_check ISO_date_format-(YYYY-MM-DD) EXACT match for validating eventDate: '1963-09-01/1963-09-30'.
-2016-06-22-12:50:28  EXACT match was SUCESSFUL, compliant with ISO_date_format-(YYYY-MM-DD): SUCCESSFUL
-2016-06-22-12:50:28  ACCEPTED the record '75849189'.
+2016-06-23-12:37:29  Reading input record '18325179'
+2016-06-23-12:37:29  Checking if eventDate value is Empty: 'NO'
+2016-06-23-12:37:29  Trying self_check ISO_date_format-(YYYY-MM-DD) EXACT match for validating eventDate: '1963-09-01/1963-09-30'
+2016-06-23-12:37:29  EXACT match was SUCESSFUL, compliant with ISO_date_format-(YYYY-MM-DD): SUCCESSFUL
+2016-06-23-12:37:29  ACCEPTED the record '18325179'
 
-2016-06-22-12:50:28  Reading input record '62561394'.
-2016-06-22-12:50:28  Checking if eventDate value is Empty: 'NO'.
-2016-06-22-12:50:28  Trying self_check ISO_date_format-(YYYY-MM-DD) EXACT match for validating eventDate: '1931-09-01/1931-09-30'.
-2016-06-22-12:50:28  EXACT match was SUCESSFUL, compliant with ISO_date_format-(YYYY-MM-DD): SUCCESSFUL
-2016-06-22-12:50:28  ACCEPTED the record '62561394'.
+2016-06-23-12:37:29  Reading input record '11611241'
+2016-06-23-12:37:29  Checking if eventDate value is Empty: 'NO'
+2016-06-23-12:37:29  Trying self_check ISO_date_format-(YYYY-MM-DD) EXACT match for validating eventDate: '1931-09-01/1931-09-30'
+2016-06-23-12:37:29  EXACT match was SUCESSFUL, compliant with ISO_date_format-(YYYY-MM-DD): SUCCESSFUL
+2016-06-23-12:37:29  ACCEPTED the record '11611241'
 
-2016-06-22-12:50:28  Reading input record '78046404'.
-2016-06-22-12:50:28  Checking if eventDate value is Empty: 'NO'.
-2016-06-22-12:50:28  Trying self_check ISO_date_format-(YYYY-MM-DD) EXACT match for validating eventDate: '1880-01-01/1880-12-31'.
-2016-06-22-12:50:28  EXACT match was SUCESSFUL, compliant with ISO_date_format-(YYYY-MM-DD): SUCCESSFUL
-2016-06-22-12:50:28  ACCEPTED the record '78046404'.
+2016-06-23-12:37:29  Reading input record '20179281'
+2016-06-23-12:37:29  Checking if eventDate value is Empty: 'NO'
+2016-06-23-12:37:29  Trying self_check ISO_date_format-(YYYY-MM-DD) EXACT match for validating eventDate: '1880-01-01/1880-12-31'
+2016-06-23-12:37:29  EXACT match was SUCESSFUL, compliant with ISO_date_format-(YYYY-MM-DD): SUCCESSFUL
+2016-06-23-12:37:29  ACCEPTED the record '20179281'
 
-2016-06-22-12:50:28  Reading input record '13268035'.
-2016-06-22-12:50:28  Checking if eventDate value is Empty: 'NO'.
-2016-06-22-12:50:28  Trying self_check ISO_date_format-(YYYY-MM-DD) EXACT match for validating eventDate: '1904-06-01/1904-06-30'.
-2016-06-22-12:50:28  EXACT match was SUCESSFUL, compliant with ISO_date_format-(YYYY-MM-DD): SUCCESSFUL
-2016-06-22-12:50:28  ACCEPTED the record '13268035'.
+2016-06-23-12:37:29  Reading input record '20316815'
+2016-06-23-12:37:29  Checking if eventDate value is Empty: 'NO'
+2016-06-23-12:37:29  Trying self_check ISO_date_format-(YYYY-MM-DD) EXACT match for validating eventDate: '1904-06-01/1904-06-30'
+2016-06-23-12:37:29  EXACT match was SUCESSFUL, compliant with ISO_date_format-(YYYY-MM-DD): SUCCESSFUL
+2016-06-23-12:37:29  ACCEPTED the record '20316815'
 
-2016-06-22-12:50:28  Reading input record '17327705'.
-2016-06-22-12:50:28  Checking if eventDate value is Empty: 'YES'.
-2016-06-22-12:50:28  UNABLE-to-validate the record '17327705'.
+2016-06-23-12:37:29  Reading input record '26431055'
+2016-06-23-12:37:29  Checking if eventDate value is Empty: 'YES'
+2016-06-23-12:37:29  UNABLE-to-validate the record '26431055'
 
-2016-06-22-12:50:28  Reading input record '28426816'.
-2016-06-22-12:50:28  Checking if eventDate value is Empty: 'YES'.
-2016-06-22-12:50:28  UNABLE-to-validate the record '28426816'.
+2016-06-23-12:37:29  Reading input record '24240980'
+2016-06-23-12:37:29  Checking if eventDate value is Empty: 'YES'
+2016-06-23-12:37:29  UNABLE-to-validate the record '24240980'
 
-2016-06-22-12:50:28  Reading input record '20189349'.
-2016-06-22-12:50:28  Checking if eventDate value is Empty: 'YES'.
-2016-06-22-12:50:28  UNABLE-to-validate the record '20189349'.
+2016-06-23-12:37:29  Reading input record '22992627'
+2016-06-23-12:37:29  Checking if eventDate value is Empty: 'YES'
+2016-06-23-12:37:29  UNABLE-to-validate the record '22992627'
 
-2016-06-22-12:50:28  Reading input record '87834150'.
-2016-06-22-12:50:28  Checking if eventDate value is Empty: 'YES'.
-2016-06-22-12:50:28  UNABLE-to-validate the record '87834150'.
+2016-06-23-12:37:29  Reading input record '15891540'
+2016-06-23-12:37:29  Checking if eventDate value is Empty: 'YES'
+2016-06-23-12:37:29  UNABLE-to-validate the record '15891540'
 
-2016-06-22-12:50:28  Wrote 6 accepted records to demo_output_name_date_val.csv.
-2016-06-22-12:50:28  Wrote 4 UNABLE-to-validate records to demo_output_name_date_val.csv.
+2016-06-23-12:37:29  Wrote 6 accepted records to demo_output_name_date_val.csv
+2016-06-23-12:37:29  Wrote 4 UNABLE-to-validate records to demo_output_name_date_val.csv
