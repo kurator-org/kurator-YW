@@ -26,7 +26,7 @@ def clean_scientific_name():
 
     # create log file 
     name_val_log = open(name_val_log_file_name,'w')    
-    name_val_log.write(timestamp("Reading input records from '{0}'.\n".format(input1_data_file_name))) 
+    name_val_log.write(timestamp("Reading input records from '{0}'\n".format(input1_data_file_name))) 
     
     
     # create CSV reader for local_authority_source records
@@ -85,7 +85,7 @@ def clean_scientific_name():
         original_scientificName = original1_record['scientificName']
         original_authorship = original1_record['scientificNameAuthorship']
         name_val_log.write('\n')
-        name_val_log.write(timestamp("Reading input record '{0}'.\n".format(RecordID)))
+        name_val_log.write(timestamp("Reading input record '{0}'\n".format(RecordID)))
  
         check_type = 'external check'
         source_used = 'local_authority_source'
@@ -99,11 +99,11 @@ def clean_scientific_name():
         else:
             check_result = 'NO'
             match_result = 'FAILED'
-        name_val_log.write(timestamp("Checking if scientificName value is Empty - '{0}'.\n".format(check_result)))
+        name_val_log.write(timestamp("Checking if scientificName value is Empty - '{0}'\n".format(check_result)))
         
         if check_result == 'YES':
             final_result = 'UNABLE-to-validate'
-            name_val_log.write(timestamp("UNABLE-to-validate the record '{0}'.\n".format(RecordID)))
+            name_val_log.write(timestamp("UNABLE-to-validate the record '{0}'\n".format(RecordID)))
             rejected_record_count += 1
             
             # write output record to output file
@@ -114,35 +114,35 @@ def clean_scientific_name():
         else:
             final_result = None
         
-        name_val_log.write(timestamp("Trying external_check local_authority_source EXACT match for validating scientificName: '{0}'.\n".format(original_scientificName))) 
+        name_val_log.write(timestamp("Trying external_check local_authority_source EXACT match for validating scientificName: '{0}'\n".format(original_scientificName))) 
         matching_method = None
         # first try exact match of the scientific name against local_authority_source
         matching_local_authority_source_record = exactmatch(local_authority_source_scientificName_lst, original_scientificName)[1]
         match_result = exactmatch(local_authority_source_scientificName_lst, original_scientificName)[0]
         if match_result == "SUCCESSFUL":
-            name_val_log.write(timestamp("EXACT match was SUCCESSFUL, compliant with local_authority_source: SUCCESSFUL.\n"))
+            name_val_log.write(timestamp("EXACT match was SUCCESSFUL, compliant with local_authority_source: SUCCESSFUL\n"))
             matching_method = match_method
             final_result = "ACCEPTED"
 
         # otherwise try a fuzzy match
         else:
             match_method = "FUZZY"
-            name_val_log.write(timestamp("EXACT match was FAILED, compliant with local_authority_source: FAILED.\n"))
-            name_val_log.write(timestamp("Trying external_check local_authority_source FUZZY match for validating scientificName: '{0}'.\n".format(original_scientificName)))
+            name_val_log.write(timestamp("EXACT match was FAILED, compliant with local_authority_source: FAILED\n"))
+            name_val_log.write(timestamp("Trying external_check local_authority_source FUZZY match for validating scientificName: '{0}'\n".format(original_scientificName)))
             matching_local_authority_source_record = fieldmatch(local_authority_source_scientificName_lst, original_scientificName)[1]
             match_result = fieldmatch(local_authority_source_scientificName_lst, original_scientificName)[0]
             if match_result == "SUCCESSFUL":
-                name_val_log.write(timestamp("FUZZY match was SUCCESSFUL, compliant with local_authority_source: SUCCESSFUL.\n"))
+                name_val_log.write(timestamp("FUZZY match was SUCCESSFUL, compliant with local_authority_source: SUCCESSFUL\n"))
                 matching_method = match_method
                 final_result = "ACCEPTED"
             else:
-                name_val_log.write(timestamp("FUZZY match was FAILED, compliant with local_authority_source: FAILED.\n"))   
+                name_val_log.write(timestamp("FUZZY match was FAILED, compliant with local_authority_source: FAILED\n"))   
                 final_result= "UNABLE-to-validate"
 
     #########################################################
         # reject the currect record if not matched successfully against local_authority_source
         if final_result == "UNABLE-to-validate":
-            name_val_log.write(timestamp("UNABLE-to-validate the record '{0}'.\n".format(RecordID)))
+            name_val_log.write(timestamp("UNABLE-to-validate the record '{0}'\n".format(RecordID)))
             rejected_record_count += 1
             
             # write output record to output file
@@ -174,7 +174,7 @@ def clean_scientific_name():
             field_name = "scientificName"
             original_value = original_scientificName
             updated_value = updated_scientificName
-            name_val_log.write(timestamp("UPDATING record '{0}': scientificName from '{1}' to '{2}'.\n".format(
+            name_val_log.write(timestamp("UPDATING record '{0}': scientificName from '{1}' to '{2}'\n".format(
                      RecordID, original_value, updated_value)))
             output1_record['scientificName'] = updated_scientificName
             
@@ -182,11 +182,11 @@ def clean_scientific_name():
             field_name = "scientificNameAuthorship"
             original_value = original_authorship
             updated_value = updated_authorship
-            name_val_log.write(timestamp("UPDATING record '{0}': scientificNameAuthorship from '{1}' to '{2}'.\n".format(
+            name_val_log.write(timestamp("UPDATING record '{0}': scientificNameAuthorship from '{1}' to '{2}'\n".format(
                 RecordID, original_value, updated_value)))
             output1_record['scientificNameAuthorship'] = updated_authorship
     #####################################################################
-        name_val_log.write(timestamp("ACCEPTED the record '{0}'.\n".format(RecordID)))
+        name_val_log.write(timestamp("ACCEPTED the record '{0}'\n".format(RecordID)))
         accepted_record_count += 1
         
         # write output record to output file
@@ -195,8 +195,8 @@ def clean_scientific_name():
 
     print
     name_val_log.write("\n")
-    name_val_log.write(timestamp("Wrote {0} ACCEPTED records to {1}.\n".format(accepted_record_count, output1_data_file_name)))
-    name_val_log.write(timestamp("Wrote {0} UNABLE-to-validate records to {1}.\n".format(rejected_record_count, output1_data_file_name)))
+    name_val_log.write(timestamp("Wrote {0} ACCEPTED records to {1}\n".format(accepted_record_count, output1_data_file_name)))
+    name_val_log.write(timestamp("Wrote {0} UNABLE-to-validate records to {1}\n".format(rejected_record_count, output1_data_file_name)))
     
 
 def clean_event_date():
@@ -214,7 +214,7 @@ def clean_event_date():
     final_result = None
     # create log file
     date_val_log = open(date_val_log_file_name,'w')    
-    date_val_log.write(timestamp("Reading input records from '{0}'.\n".format(input2_data_file_name)))
+    date_val_log.write(timestamp("Reading input records from '{0}'\n".format(input2_data_file_name)))
     
         
     input2_data = csv.DictReader(open('demo_output_name_val.csv', 'r'),
@@ -243,7 +243,7 @@ def clean_event_date():
         original2_eventDate = original2_record['eventDate']
 
         date_val_log.write('\n')
-        date_val_log.write(timestamp("Reading input record '{0}'.\n".format(RecordID)))        
+        date_val_log.write(timestamp("Reading input record '{0}'\n".format(RecordID)))        
         
         check_type = 'self_check'
         source_used = 'ISO_date_format-(YYYY-MM-DD)'
@@ -257,12 +257,12 @@ def clean_event_date():
         else: 
             check_result = 'NO'
             match_result = 'FAILED'
-        date_val_log.write(timestamp("Checking if eventDate value is Empty: '{0}'.\n".format(check_result)))
+        date_val_log.write(timestamp("Checking if eventDate value is Empty: '{0}'\n".format(check_result)))
         
         
         if check_result == 'YES':
             final_result = 'UNABLE-to-validate'
-            date_val_log.write(timestamp("UNABLE-to-validate the record '{0}'.\n".format(RecordID)))
+            date_val_log.write(timestamp("UNABLE-to-validate the record '{0}'\n".format(RecordID)))
             rejected2_record_count += 1
             
             # write output record to output file
@@ -273,7 +273,7 @@ def clean_event_date():
         else:
             final_result = 'ACCEPTED'
                     
-        date_val_log.write(timestamp("Trying self_check ISO_date_format-(YYYY-MM-DD) EXACT match for validating eventDate: '{0}'.\n".format(original2_eventDate)))
+        date_val_log.write(timestamp("Trying self_check ISO_date_format-(YYYY-MM-DD) EXACT match for validating eventDate: '{0}'\n".format(original2_eventDate)))
         # date format: xxxx-xx-xx
         if re.match(r'^(\d{4}\-)+(\d{1,2}\-)+(\d{1,2})$',original2_eventDate):
             match_result = 'SUCESSFUL'
@@ -304,7 +304,7 @@ def clean_event_date():
                 field_name = "eventDate"
                 original_value = original2_eventDate
                 updated_value = updated2_eventDate
-                date_val_log.write(timestamp("UPDATING record '{0}': eventDate from '{1}' to '{2}'.\n".format(RecordID, original2_eventDate, updated2_eventDate)))
+                date_val_log.write(timestamp("UPDATING record '{0}': eventDate from '{1}' to '{2}'\n".format(RecordID, original2_eventDate, updated2_eventDate)))
                 output2_record['eventDate'] = updated2_eventDate
             elif re.match(r'^(\d{1,2}\/)+(\d{1,2}\/)+(\d{2})$',original2_eventDate):
                 dateparts_slash = original2_eventDate.split('/')
@@ -320,11 +320,11 @@ def clean_event_date():
                 field_name = "eventDate"
                 original_value = original2_eventDate
                 updated_value = updated2_eventDate
-                date_val_log.write(timestamp("UPDATING record '{0}': eventDate from '{1}' to '{2}'.\n".format(RecordID, original2_eventDate, updated2_eventDate)))
+                date_val_log.write(timestamp("UPDATING record '{0}': eventDate from '{1}' to '{2}'\n".format(RecordID, original2_eventDate, updated2_eventDate)))
                 output2_record['eventDate'] = updated2_eventDate
                 
                 
-        date_val_log.write(timestamp("ACCEPTED the record '{0}'.\n".format(RecordID)))    
+        date_val_log.write(timestamp("ACCEPTED the record '{0}'\n".format(RecordID)))    
         accepted2_record_count += 1  
         
         # write output record to output file
@@ -333,8 +333,8 @@ def clean_event_date():
         
     print
     date_val_log.write("\n")
-    date_val_log.write(timestamp("Wrote {0} accepted records to {1}.\n".format(accepted2_record_count, output2_data_file_name)))
-    date_val_log.write(timestamp("Wrote {0} UNABLE-to-validate records to {1}.\n".format(rejected2_record_count, output2_data_file_name)))
+    date_val_log.write(timestamp("Wrote {0} accepted records to {1}\n".format(accepted2_record_count, output2_data_file_name)))
+    date_val_log.write(timestamp("Wrote {0} UNABLE-to-validate records to {1}\n".format(rejected2_record_count, output2_data_file_name)))
 
 
 
