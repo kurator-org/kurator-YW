@@ -1,0 +1,80 @@
+
+/* Start of top-level graph */
+digraph Workflow {
+rankdir=TB
+
+/* Title for graph */
+fontname=Courier; fontsize=18; labelloc=t
+label=evolve_csv
+
+/* Start of double cluster for drawing box around nodes in workflow */
+subgraph cluster_workflow_box_outer { label=""; color=black; penwidth=2
+subgraph cluster_workflow_box_inner { label=""; color=white
+
+/* Style for nodes representing atomic programs in workflow */
+node[shape=box style=filled fillcolor="#CCFFCC" peripheries=1 fontname=Courier]
+
+/* Nodes representing atomic programs in workflow */
+read_num [shape=record rankdir=LR label="{<f0> read_num |<f1> Read number from input file into variable 'num'}"];
+update_num [shape=record rankdir=LR label="{<f0> update_num |<f1> Update variable 'num' by num += 1}"];
+
+/* Style for nodes representing non-parameter data channels in workflow */
+node[shape=box style="rounded,filled" fillcolor="#FFFFCC" peripheries=1 fontname=Helvetica]
+
+/* Nodes for non-parameter data channels in workflow */
+output_csv_file [shape=record rankdir=LR label="{<f0> output_csv_file |<f1> file\:updated_data.csv}"];
+evolve_log [shape=record rankdir=LR label="{<f0> evolve_log |<f1> file\:evolve_log.txt}"];
+input_csv_file [shape=record rankdir=LR label="{<f0> input_csv_file |<f1> file\:original_data.csv}"];
+num
+
+/* Style for nodes representing parameter channels in workflow */
+node[shape=box style="rounded,filled" fillcolor="#FCFCFC" peripheries=1 fontname=Helvetica]
+
+/* Nodes representing parameter channels in workflow */
+
+/* Edges representing connections between programs and channels */
+read_num -> num
+input_csv_file -> read_num
+update_num -> output_csv_file
+update_num -> evolve_log
+num -> update_num
+
+/* End of double cluster for drawing box around nodes in workflow */
+}}
+
+/* Hidden double-cluster for grouping workflow input ports */
+subgraph cluster_input_ports_group_outer { label=""; color=white
+subgraph cluster_input_ports_group_inner { label=""; color=white
+
+/* Style for nodes representing workflow input ports */
+node[shape=circle style="rounded,filled" fillcolor="#FFFFFF" peripheries=1 fontname=Helvetica width=0.2]
+
+/* Nodes representing workflow input ports */
+input_csv_file_input_port [label=""]
+
+/* End of double-cluster for grouping workflow input ports */
+}}
+
+/* Hidden double-cluster for grouping workflow output ports */
+subgraph cluster_output_ports_group_outer { label=""; color=white
+subgraph cluster_output_ports_group_inner { label=""; color=white
+
+/* Style for nodes representing workflow output ports */
+node[shape=circle style="rounded,filled" fillcolor="#FFFFFF" peripheries=1 fontname=Helvetica width=0.2]
+
+/* Nodes representing workflow output ports */
+output_csv_file_output_port [label=""]
+evolve_log_output_port [label=""]
+
+/* End of double-cluster for grouping workflow output ports */
+}}
+
+/* Edges from input ports to channels */
+input_csv_file_input_port -> input_csv_file
+
+/* Edges from channels to output ports */
+output_csv_file -> output_csv_file_output_port
+evolve_log -> evolve_log_output_port
+
+/* End of top-level graph */
+}
