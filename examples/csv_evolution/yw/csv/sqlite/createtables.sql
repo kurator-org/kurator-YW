@@ -1,6 +1,7 @@
 -- .help
 .mode csv
 
+
 -- table facts import from csv
 -- tables to be used for reference
 -- FACT: extractfacts_extract_source(source_id, source_path)
@@ -9,10 +10,27 @@
 -- FACT: reconfacts_resource(resource_id, resource_uri)
 .import ../reconfacts_resource.csv reconfacts_resource
 
-
 -- table to use references
 -- FACT: extractfacts_annotation(annotation_id, source_id, line_number, tag, keyword, value)
 .import ../extractfacts_annotation.csv extractfacts_annotation
+
+-- FACT: extractfacts_annotation_qualifies(qualifying_annotation_id, primary_annotation_id)
+.import ../extractfacts_annotation_qualifies.csv extractfacts_annotation_qualifies
+
+-- FACT: modelfacts_program(program_id, program_name, qualified_program_name, begin_annotation_id, end_annotation_id)
+-- program = block= green computational step = YW annotation @begin
+.import ../modelfacts_program.csv modelfacts_program
+
+-- FACT: modelfacts_workflow(program_id)
+-- workflow in YW is the toppest level workflow (i.e., "def evolve_csv():") in the current script
+.import ../modelfacts_workflow.csv modelfacts_workflow
+
+-- FACT: modelfacts_has_subprogram(program_id, subprogram_id)
+.import ../modelfacts_has_subprogram.csv modelfacts_has_subprogram
+
+-- FACT: modelfacts_function(program_id)
+-- function = function in .py = any funcion beginning with "def FunctionName:" in the Python script rather than the main function (i.e., "def evolve_csv():") in the current script. 
+.import ../modelfacts_function.csv modelfacts_function
 
 -- FACT: modelfacts_log_template(log_template_id, port_id, entry_template, log_annotation_id).
 .import ../modelfacts_log_template.csv modelfacts_log_template
@@ -25,6 +43,26 @@ CREATE TABLE modelfacts_log_template_variable (
 );
 .import ../modelfacts_log_template_variable.csv modelfacts_log_template_variable
 
+-- FACT: modelfacts_port(port_id, port_type, port_name, qualified_port_name, port_annotation_id, data_id)
+.import ../modelfacts_port.csv modelfacts_port
+
+-- FACT: modelfacts_has_in_port(block_id, port_id)
+.import ../modelfacts_has_in_port.csv modelfacts_has_in_port
+
+-- FACT: modelfacts_has_out_port(block_id, port_id)
+.import ../modelfacts_has_out_port.csv modelfacts_has_out_port
+
+-- FACT: modelfacts_data(data_id, data_name, qualified_data_name)
+.import ../modelfacts_data.csv modelfacts_data
+
+-- FACT: modelfacts_channel(channel_id, data_id)
+.import ../modelfacts_channel.csv modelfacts_channel
+
+-- FACT: modelfacts_port_connects_to_channel(port_id, channel_id)
+.import ../modelfacts_port_connects_to_channel.csv modelfacts_port_connects_to_channel
+
+
+
 -- FACT: reconfacts_log_variable_value(resource_id, log_entry_id, log_variable_id, log_variable_value).
 CREATE TABLE reconfacts_log_variable_value (
     resource_id         INTEGER     NOT NULL       REFERENCES reconfacts_resource(resource_id),
@@ -35,7 +73,66 @@ CREATE TABLE reconfacts_log_variable_value (
 );
 .import ../reconfacts_log_variable_value.csv reconfacts_log_variable_value
 
--- table rules created for queries 
+
+
+
+
+
+-- table rules created for queries
+-- RULE: annotation_qualifies_full(qualifying_annotation_id, primary_annotation_id, source_id, line_number, keyword, value)
+CREATE TABLE annotation_qualifies_full AS
+    SELECT qualifying_annotation_id, primary_annotation_id,source_id, line_number, keyword, value
+    FROM extractfacts_annotation_qualifies LEFT OUTER JOIN extractfacts_annotation ON qualifying_annotation_id=annotation_id;
+
+-- RULE: program_description(program_id, description)
+CREATE TABLE program_description AS
+    SELECT program_id, value as description
+    FROM modelfacts_program LEFT OUTER JOIN annotation_qualifies_full
+    ON begin_annotation_id=primary_annotation_id AND keyword='@desc';
+
+-- RULE: port_description(port_id, description)
+CREATE TABLE port_description AS
+    SELECT port_id, value as description
+    FROM modelfacts_port LEFT OUTER JOIN annotation_qualifies_full
+    ON port_annotation_id=primary_annotation_id AND keyword='@desc';
+
+
+-- RULE: subprogram(program_id)
+CREATE TABLE subprogram AS
+    SELECT subprogram_id AS program_id
+    FROM modelfacts_has_subprogram;
+
+
+-- RULE: top_workflow(program_id)
+-- top_workflow is the workflow/computation_step that is not contained by another bworkflow/program/computational step.
+CREATE TABLE top_workflow AS
+    SELECT program_id FROM modelfacts_workflow
+    EXCEPT
+    SELECT program_id FROM subprogram;
+
+-- RULE: top_function(program_id)
+-- top_function is the function that is the function that is called by the main workflow/function.
+CREATE TABLE top_function AS
+    SELECT program_id FROM modelfacts_function
+    EXCEPT
+    SELECT program_id FROM subprogram;
+
+-- RULE: port_data(port_id, data_id, data_name, qualified_data_name)
+-- Port P reads or writes data D with name N and qualified name QN.
+CREATE TABLE port_data AS
+    SELECT modelfacts_port_connects_to_channel.port_id, modelfacts_data.data_id, data_name, qualified_data_name
+    FROM modelfacts_port_connects_to_channel, modelfacts_channel, modelfacts_data
+    WHERE modelfacts_channel.channel_id=modelfacts_port_connects_to_channel.channel_id AND modelfacts_channel.data_id=modelfacts_data.data_id;
+
+
+-- RULE: data_in_port(port_id, data_id)
+-- Port P is an input for data D.
+CREATE TABLE data_in_port AS
+    SELECT modelfacts_port_connects_to_channel.port_id, modelfacts_channel.data_id
+    FROM modelfacts_port_connects_to_channel, modelfacts_channel, modelfacts_has_in_port
+    WHERE modelfacts_channel.channel_id=modelfacts_port_connects_to_channel.channel_id AND modelfacts_port_connects_to_channel.port_id=modelfacts_has_in_port.port_id;
+
+
 -- RULE: log_template_variable_name(log_template_id, port_id, entry_template, log_variable_id, variable_name, log_annotation_id)
 CREATE TABLE log_template_variable_name AS
     SELECT DISTINCT modelfacts_log_template.log_template_id, port_id, entry_template, log_variable_id, variable_name, log_annotation_id
@@ -68,8 +165,7 @@ CREATE TABLE record_update AS
     SELECT v1.log_variable_value as iteration_count, v2.log_variable_value as old_value, v3.log_variable_value as new_value 
     FROM log_template_variable_name_value v1, log_template_variable_name_value v2, log_template_variable_name_value v3 
     WHERE v1.entry_template='{timestamp} The {iteration_count}th update: num is {num_old}, now is {num_new}.' 
-        AND v1.entry_template=v2.entry_template AND v2.entry_template=v3.entry_template
-        AND v1.variable_name='iteration_count' 
+        AND v1.entry_template=v2.entry_template AND v2.entry_template=v3.entry_template        AND v1.variable_name='iteration_count' 
         AND v2.variable_name='num_old'
         AND v3.variable_name='num_new' 
         AND v1.log_entry_id=v2.log_entry_id AND v2.log_entry_id=v3.log_entry_id;
