@@ -1,10 +1,11 @@
-2016-08-03-16:36:20  The 1th update: num is 1, now is 2.
-2016-08-03-16:36:20  The 2th update: num is 2, now is 3.
-2016-08-03-16:36:20  The 3th update: num is 3, now is 4.
-2016-08-03-16:36:20  The 4th update: num is 4, now is 5.
-2016-08-03-16:36:20  The 5th update: num is 5, now is 6.
-2016-08-03-16:36:20  The 6th update: num is 6, now is 7.
-2016-08-03-16:36:20  The 7th update: num is 7, now is 8.
-2016-08-03-16:36:20  The 8th update: num is 8, now is 9.
-2016-08-03-16:36:20  The 9th update: num is 9, now is 10.
-2016-08-03-16:36:20  Total iteration times: 9.
+2016-08-04-16:51:22  Start the workflow.
+2016-08-04-16:51:22  The 1th update: num is 1, now is 2.
+2016-08-04-16:51:22  The 2th update: num is 2, now is 3.
+2016-08-04-16:51:22  The 3th update: num is 3, now is 4.
+2016-08-04-16:51:22  The 4th update: num is 4, now is 5.
+2016-08-04-16:51:22  The 5th update: num is 5, now is 6.
+2016-08-04-16:51:22  The 6th update: num is 6, now is 7.
+2016-08-04-16:51:22  The 7th update: num is 7, now is 8.
+2016-08-04-16:51:22  The 8th update: num is 8, now is 9.
+2016-08-04-16:51:22  The 9th update: num is 9, now is 10.
+2016-08-04-16:51:22  Total iteration times: 9.

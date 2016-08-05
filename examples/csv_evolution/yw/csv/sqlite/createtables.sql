@@ -132,6 +132,67 @@ CREATE TABLE data_in_port AS
     FROM modelfacts_port_connects_to_channel, modelfacts_channel, modelfacts_has_in_port
     WHERE modelfacts_channel.channel_id=modelfacts_port_connects_to_channel.channel_id AND modelfacts_port_connects_to_channel.port_id=modelfacts_has_in_port.port_id;
 
+-- RULE:  data_in_workflow(data_id, subprogram_id, port_id)
+-- data in (sub)workflow read by ports
+CREATE TABLE data_in_workflow AS
+    SELECT data_in_port.data_id, subprogram_id, program_id, modelfacts_has_in_port.port_id
+    FROM modelfacts_has_subprogram, modelfacts_has_in_port, modelfacts_port_connects_to_channel, modelfacts_channel, data_in_port
+    WHERE modelfacts_has_subprogram.subprogram_id=modelfacts_has_in_port.block_id AND modelfacts_has_in_port.port_id=modelfacts_port_connects_to_channel.port_id AND modelfacts_port_connects_to_channel.channel_id=modelfacts_channel.channel_id AND modelfacts_channel.data_id=data_in_port.data_id;
+
+-- RULE: program_immediately_downstream(program1_id, program2_id)
+-- Program P1 is immediately downstream of Program P2.
+CREATE TABLE program_immediately_downstream AS
+    SELECT modelfacts_has_in_port.block_id AS program1_id, modelfacts_has_out_port.block_id AS program2_id
+    FROM modelfacts_has_in_port, modelfacts_has_out_port, modelfacts_port_connects_to_channel AS pcc1, modelfacts_port_connects_to_channel AS pcc2
+    WHERE modelfacts_has_in_port.port_id=pcc1.port_id AND pcc1.channel_id=pcc2.channel_id AND pcc1.port_id!=pcc2.port_id and pcc2.port_id=modelfacts_has_out_port.port_id;
+
+-- RULE  program_immediately_upstream(program2_id, program1_id)
+-- Program P2 is immediately upstream of Program P1.
+CREATE TABLE program_immediately_upstream as select program2_id, program1_id
+    FROM program_immediately_downstream;
+
+-- RULE: program_downstream(p1, p2)
+-- Program P1 is downstream of Program P2.
+CREATE TABLE program_downstream AS
+    WITH RECURSIVE program_downstream(p1,p2) AS (SELECT program1_id AS p1, program2_id AS p2 FROM program_immediately_downstream UNION SELECT program_downstream.p1, program_immediately_downstream.program2_id FROM program_downstream, program_immediately_downstream WHERE program_downstream.p2=program_immediately_downstream.program1_id)
+    SELECT * FROM program_downstream;
+
+
+-- RULE: program_upstream(p2, p1)
+-- Program P2 is upstream of Program P1.
+CREATE TABLE program_upstream AS
+    SELECT p2, p1
+    FROM program_downstream;
+
+
+-- RULE: data_immediately_downstream(d1, d2)
+-- Data D1 is immediately downstream of data D2.
+CREATE TABLE data_immediately_downstream AS
+    SELECT c1.data_id as d1, c2.data_id as d2
+    FROM modelfacts_channel AS c1, modelfacts_channel AS c2, modelfacts_port_connects_to_channel AS pcc1, modelfacts_port_connects_to_channel AS pcc2, modelfacts_has_out_port, modelfacts_has_in_port
+    WHERE c1.channel_id=pcc1.channel_id AND c2.channel_id=pcc2.channel_id AND pcc1.port_id=modelfacts_has_out_port.port_id AND pcc2.port_id=modelfacts_has_in_port.port_id AND modelfacts_has_in_port.block_id=modelfacts_has_out_port.block_id;
+
+
+-- RULE: data_immediately_upstream(d2, d1)
+-- Data D1 is immediately upstream of data D2.
+CREATE TABLE data_immediately_upstream AS
+    SELECT d2, d1
+    FROM data_immediately_downstream;
+
+
+-- RULE: data_downstream(dd1, dd2)
+-- Data DD1 is downstream of data DD2.
+CREATE TABLE data_downstream AS
+    WITH RECURSIVE data_downstream(dd1,dd2) AS (select d1 as dd1, d2 as dd2 from data_immediately_downstream UNION SELECT data_downstream.dd1, data_immediately_downstream.d2 FROM data_downstream, data_immediately_downstream WHERE data_downstream.dd2=data_immediately_downstream.d1) SELECT * FROM data_downstream;
+
+
+-- RULE: data_upstream(dd2, dd1)
+-- Data DD2 is upstream of Data DD1
+CREATE TABLE data_upstream AS
+    SELECT dd2, dd1
+    FROM data_downstream;
+
+
 
 -- RULE: log_template_variable_name(log_template_id, port_id, entry_template, log_variable_id, variable_name, log_annotation_id)
 CREATE TABLE log_template_variable_name AS

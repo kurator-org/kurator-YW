@@ -5,8 +5,13 @@
 @uri file:updated_data.csv
 @out evolve_log @desc log file for evolving CSV file
 @uri file:evolve_log.txt
+@begin initialize_run @desc Create the run log file
+@out evolve_log @uri file:evolve_log.txt
+@out log_file_name
+@end initialize_run
 @begin read_num @desc Read number from input file into variable 'num'
 @in input_csv_file @uri file:original_data.csv
+@in log_file_name
 @out num_old @as num
 @desc number before updating
 print line

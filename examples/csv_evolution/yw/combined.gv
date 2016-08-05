@@ -15,6 +15,7 @@ subgraph cluster_workflow_box_inner { label=""; color=white
 node[shape=box style=filled fillcolor="#CCFFCC" peripheries=1 fontname=Courier]
 
 /* Nodes representing atomic programs in workflow */
+initialize_run [shape=record rankdir=LR label="{<f0> initialize_run |<f1> Create the run log file}"];
 read_num [shape=record rankdir=LR label="{<f0> read_num |<f1> Read number from input file into variable 'num'}"];
 update_num [shape=record rankdir=LR label="{<f0> update_num |<f1> Update variable 'num' by num += 1}"];
 
@@ -25,6 +26,7 @@ node[shape=box style="rounded,filled" fillcolor="#FFFFCC" peripheries=1 fontname
 output_csv_file [shape=record rankdir=LR label="{<f0> output_csv_file |<f1> file\:updated_data.csv}"];
 evolve_log [shape=record rankdir=LR label="{<f0> evolve_log |<f1> file\:evolve_log.txt}"];
 input_csv_file [shape=record rankdir=LR label="{<f0> input_csv_file |<f1> file\:original_data.csv}"];
+log_file_name
 num
 
 /* Style for nodes representing parameter channels in workflow */
@@ -33,8 +35,11 @@ node[shape=box style="rounded,filled" fillcolor="#FCFCFC" peripheries=1 fontname
 /* Nodes representing parameter channels in workflow */
 
 /* Edges representing connections between programs and channels */
+initialize_run -> evolve_log
+initialize_run -> log_file_name
 read_num -> num
 input_csv_file -> read_num
+log_file_name -> read_num
 update_num -> output_csv_file
 update_num -> evolve_log
 num -> update_num

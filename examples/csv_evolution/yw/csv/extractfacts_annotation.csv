@@ -10,30 +10,37 @@ annotation_id,source_id,line_number,tag,keyword,value
 9,1,11,out,@out,evolve_log
 10,1,11,desc,@desc,log file for evolving CSV file
 11,1,12,uri,@uri,file:evolve_log.txt
-12,1,25,begin,@begin,read_num
-13,1,25,desc,@desc,Read number from input file into variable 'num'
-14,1,26,in,@in,input_csv_file
-15,1,26,uri,@uri,file:original_data.csv
-16,1,27,out,@out,num_old
-17,1,27,as,@as,num
-18,1,28,desc,@desc,number before updating
-19,1,43,end,@end,read_num
-20,1,47,begin,@begin,update_num
-21,1,47,desc,@desc,Update variable 'num' by num += 1
-22,1,48,in,@in,num_old
-23,1,48,as,@as,num
-24,1,49,out,@out,output_csv_file
-25,1,49,uri,@uri,file:updated_data.csv
-26,1,50,desc,@desc,output CSV file
-27,1,51,out,@out,evolve_log
-28,1,51,uri,@uri,file:evolve_log.txt
-29,1,52,desc,@desc,log file for evolving CSV file
-30,1,53,log,@log,"{timestamp} The {iteration_count}th update: num is {num_old}, now is {num_new}."
-31,1,54,log,@log,Total iteration times: {iteration_count}.
-32,1,65,end,@end,update_num
-33,1,69,end,@end,evolve_csv
-34,1,73,begin,@begin,timestamp
-35,1,74,param,@param,message
-36,1,74,desc,@desc,the input of the defined function
-37,1,75,return,@return,timestamp_message
-38,1,84,end,@end,timestamp
+12,1,24,begin,@begin,initialize_run
+13,1,24,desc,@desc,Create the run log file
+14,1,25,out,@out,evolve_log
+15,1,25,uri,@uri,file:evolve_log.txt
+16,1,26,out,@out,log_file_name
+17,1,30,end,@end,initialize_run
+18,1,35,begin,@begin,read_num
+19,1,35,desc,@desc,Read number from input file into variable 'num'
+20,1,36,in,@in,input_csv_file
+21,1,36,uri,@uri,file:original_data.csv
+22,1,37,in,@in,log_file_name
+23,1,38,out,@out,num_old
+24,1,38,as,@as,num
+25,1,39,desc,@desc,number before updating
+26,1,54,end,@end,read_num
+27,1,58,begin,@begin,update_num
+28,1,58,desc,@desc,Update variable 'num' by num += 1
+29,1,59,in,@in,num_old
+30,1,59,as,@as,num
+31,1,60,out,@out,output_csv_file
+32,1,60,uri,@uri,file:updated_data.csv
+33,1,61,desc,@desc,output CSV file
+34,1,62,out,@out,evolve_log
+35,1,62,uri,@uri,file:evolve_log.txt
+36,1,63,desc,@desc,log file for evolving CSV file
+37,1,64,log,@log,"{timestamp} The {iteration_count}th update: num is {num_old}, now is {num_new}."
+38,1,65,log,@log,Total iteration times: {iteration_count}.
+39,1,76,end,@end,update_num
+40,1,80,end,@end,evolve_csv
+41,1,84,begin,@begin,timestamp
+42,1,85,param,@param,message
+43,1,85,desc,@desc,the input of the defined function
+44,1,86,return,@return,timestamp_message
+45,1,95,end,@end,timestamp

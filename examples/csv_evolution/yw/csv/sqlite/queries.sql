@@ -134,3 +134,60 @@ SELECT COUNT(port_id)
 FROM modelfacts_data, data_in_port
 WHERE qualified_data_name='evolve_csv[num]' AND modelfacts_data.data_id=data_in_port.data_id;
 
+-- MQ10: How many data are read by more than one port in workflow evolve_csv? - mq10(#count)
+CREATE TABLE data_in_port_count AS
+    SELECT data_id, count(port_id) AS port_ct
+    from data_in_port
+    GROUP BY data_id;
+CREATE TABLE data_in_workflow_read_by_multiple_ports AS
+    SELECT data_in_workflow.data_id, subprogram_id, program_id, port_ct
+    FROM data_in_workflow, data_in_port_count
+    WHERE port_ct>1 AND data_in_workflow.data_id=data_in_port_count.data_id;
+SELECT COUNT(data_id) AS DataCount
+    FROM modelfacts_program, data_in_workflow_read_by_multiple_ports
+    WHERE program_name='evolve_csv' AND data_in_workflow_read_by_multiple_ports.program_id=modelfacts_program.program_id;
+
+-- MQ11: What program blocks are immediately downstream of read_num? - mq11(DownstreamProgramName)
+SELECT p1.program_name AS DownstreamProgramName
+FROM program_immediately_downstream, modelfacts_program AS p1, modelfacts_program AS p2
+WHERE p2.program_name='read_num' AND p1.program_id=program_immediately_downstream.program1_id;
+
+-- MQ12: What program blocks are immediately upstream of update_num? - mq12(UpstreamProgramName)
+SELECT p2.program_name AS UpstreamProgramName
+FROM program_immediately_upstream, modelfacts_program AS p1, modelfacts_program AS p2
+WHERE p1.program_name='update_num' AND p2.program_id=program_immediately_upstream.program1_id;
+
+-- MQ13: What program blocks are upstream of update_num? - mq13(UpstreamProgramName)
+SELECT DISTINCT pro2.program_name AS UpstreamProgramName
+FROM program_upstream, modelfacts_program AS pro1, modelfacts_program AS pro2
+WHERE pro1.program_name='update_num' AND pro2.program_id=program_upstream.p2;
+
+-- MQ14: What program blocks are anywhere downstream of initialize_run? - mq14(DownstreamProgramName)
+SELECT DISTINCT pro1.program_name AS DownstreamProgramName
+FROM program_downstream, modelfacts_program AS pro1, modelfacts_program AS pro2
+WHERE pro2.program_name='initialize_run' AND pro1.program_id=program_downstream.p1;
+
+-- MQ15: What data is immediately downstream of num? - mq15(DownstreamDataName)
+SELECT DISTINCT dt1.data_name AS DownstreamDataName
+FROM modelfacts_data AS dt1, modelfacts_data AS dt2, data_immediately_downstream
+WHERE dt2.data_name='num' AND dt2.data_id=data_immediately_downstream.d2 AND dt1.data_id=data_immediately_downstream.d1;
+
+-- MQ16: What data is immediately upstream of num? - mq16(UpstreamDataName)
+SELECT DISTINCT dt2.data_name AS UpstreamDateName
+FROM modelfacts_data AS dt1, modelfacts_data AS dt2, data_immediately_upstream
+WHERE dt1.data_name='num' AND dt1.data_id=data_immediately_upstream.d1 AND dt2.data_id=data_immediately_upstream.d2;
+
+-- MQ17: What data is downstream of num? - mq17(DownstreamDataName)
+SELECT DISTINCT dt1.data_name
+FROM modelfacts_data AS dt1, modelfacts_data AS dt2, data_downstream
+WHERE dt2.data_name='num' AND dt1.data_id=data_downstream.dd1 AND dt2.data_id=data_downstream.dd2;
+
+-- MQ18: What data is upstream of num? - mq18(UpstreamDataName)
+SELECT DISTINCT dt2.data_name
+FROM modelfacts_data AS dt1, modelfacts_data AS dt2, data_upstream
+WHERE dt1.data_name='num' AND dt2.data_id=data_upstream.dd2 AND dt1.data_id=data_upstream.dd1;
+
+
+
+
+
