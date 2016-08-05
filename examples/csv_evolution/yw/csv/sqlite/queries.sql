@@ -92,7 +92,7 @@ update_num,evolve_csv.update_num,15,25
 */
 
 -- MQ2:  What is the name and description of the top-level workflow? - mq2(WorflowName, Description)
-SELECT qualified_program_name AS WorflowName, desc_value AS Description
+SELECT qualified_program_name AS WorflowName, description AS Description
 FROM top_workflow, program_description, modelfacts_program
 WHERE top_workflow.program_id=program_description.program_id AND top_workflow.program_id=modelfacts_program.program_id;
 
