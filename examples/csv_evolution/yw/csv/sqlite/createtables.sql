@@ -61,7 +61,14 @@ CREATE TABLE modelfacts_log_template_variable (
 -- FACT: modelfacts_port_connects_to_channel(port_id, channel_id)
 .import ../modelfacts_port_connects_to_channel.csv modelfacts_port_connects_to_channel
 
+-- FACT: modelfacts_uri_variable(uri_variable_id, variable_name, port_id)
+.import ../modelfacts_uri_variable.csv modelfacts_uri_variable
 
+-- FACT: reconfacts_uri_variable_value(resource_id, uri_variable_id, uri_variable_value)
+.import ../reconfacts_uri_variable_value.csv reconfacts_uri_variable_value
+
+-- FACT: reconfacts_data_resource(data_id, resource_id)
+.import ../reconfacts_data_resource.csv reconfacts_data_resource
 
 -- FACT: reconfacts_log_variable_value(resource_id, log_entry_id, log_variable_id, log_variable_value).
 CREATE TABLE reconfacts_log_variable_value (
@@ -72,6 +79,10 @@ CREATE TABLE reconfacts_log_variable_value (
     PRIMARY KEY (log_entry_id, log_variable_id)
 );
 .import ../reconfacts_log_variable_value.csv reconfacts_log_variable_value
+
+-- FACT: resource_metadat(resource_id, variable_name, uri_variable_value, port_id)
+-- Resource R with uri variable U named N with value V passed through Port P.
+CREATE TABLE resource_metadata AS select reconfacts_data_resource.resource_id, modelfacts_uri_variable.variable_name, reconfacts_uri_variable_value.uri_variable_value, modelfacts_uri_variable.port_id from modelfacts_uri_variable, reconfacts_data_resource, reconfacts_uri_variable_value, modelfacts_channel, modelfacts_port_connects_to_channel where reconfacts_data_resource.data_id=modelfacts_channel.data_id and modelfacts_channel.channel_id=modelfacts_port_connects_to_channel.channel_id and modelfacts_port_connects_to_channel.port_id=modelfacts_uri_variable.port_id and modelfacts_uri_variable.uri_variable_id=reconfacts_uri_variable_value.uri_variable_id and reconfacts_uri_variable_value.resource_id=reconfacts_data_resource.resource_id;
 
 
 

@@ -187,7 +187,8 @@ SELECT DISTINCT dt2.data_name
 FROM modelfacts_data AS dt1, modelfacts_data AS dt2, data_upstream
 WHERE dt1.data_name='num' AND dt2.data_id=data_upstream.dd2 AND dt1.data_id=data_upstream.dd1;
 
-
-
-
+-- MQ19: What URI variables are associated with writes of data evolve_csv[num]? - mq19(VariableName)
+SELECT variable_name as VariableName
+FROM modelfacts_uri_variable, modelfacts_has_out_port, modelfacts_port_connects_to_channel, modelfacts_channel, modelfacts_data
+WHERE modelfacts_uri_variable.port_id=modelfacts_has_out_port.port_id AND modelfacts_has_out_port.port_id=modelfacts_port_connects_to_channel.port_id AND modelfacts_port_connects_to_channel.channel_id=modelfacts_channel.channel_id AND modelfacts_channel.data_id=modelfacts_data.data_id AND qualified_data_name='evolve_csv[num]';
 
