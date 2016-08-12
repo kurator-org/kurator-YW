@@ -2,7 +2,6 @@ port_id,uri
 1,file:original_data.csv
 2,file:updated_data.csv
 3,file:evolve_log.txt
-4,file:evolve_log.txt
-6,file:original_data.csv
-10,file:updated_data.csv
-11,file:evolve_log.txt
+4,file:original_data.csv
+7,file:updated_data.csv
+8,file:evolve_log.txt

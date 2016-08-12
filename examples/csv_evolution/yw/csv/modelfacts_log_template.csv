@@ -1,3 +1,3 @@
 log_template_id,port_id,entry_template,log_annotation_id
-1,11,"{timestamp} The {iteration_count}th update: num is {num_old}, now is {num_new}.",37
-2,11,Total iteration times: {iteration_count}.,38
+1,8,"{timestamp} The {iteration_count}th update: num is {num_old}, now is {num_new}.",30
+2,8,Total iteration times: {iteration_count}.,31

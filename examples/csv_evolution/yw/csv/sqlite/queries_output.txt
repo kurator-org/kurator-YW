@@ -23,7 +23,6 @@ SourceFiles
 ProgramName                        
 -----------------------------------
 evolve_csv                         
-initialize_run                     
 read_num                           
 update_num                         
 timestamp                          
@@ -31,12 +30,11 @@ uri_id                               out_id                PortName
 -----------------------------------  --------------------  --------------------
 8                                    6                     output_csv_file     
 11                                   9                     evolve_log          
-15                                   14                    evolve_log          
-32                                   31                    output_csv_file     
-35                                   34                    evolve_log          
+25                                   24                    output_csv_file     
+28                                   27                    evolve_log          
 ProgramName                          SourceFile            StartLine             Endline   
 -----------------------------------  --------------------  --------------------  ----------
-update_num                           evolve_csv.update_nu  27                    39        
+update_num                           evolve_csv.update_nu  20                    32        
 WorflowName                          Description         
 -----------------------------------  --------------------
 evolve_csv                           Workflow for simple 
@@ -45,7 +43,6 @@ FunctionName
 timestamp                          
 ProgramName                        
 -----------------------------------
-initialize_run                     
 read_num                           
 update_num                         
 InputPortName                        Description         
@@ -57,9 +54,7 @@ output_csv_file                      output CSV file
 evolve_log                           log file for evolvin
 qualified_program_name             
 -----------------------------------
-evolve_csv.initialize_run          
 evolve_csv.read_num                
-evolve_csv.update_num              
 qualified_program_name             
 -----------------------------------
 evolve_csv.update_num              
@@ -71,20 +66,13 @@ DataCount
 0                                  
 DownstreamProgramName              
 -----------------------------------
-read_num                           
+update_num                         
+UpstreamProgramName                
+-----------------------------------
 update_num                         
 UpstreamProgramName                
 -----------------------------------
 read_num                           
-update_num                         
-UpstreamProgramName                
------------------------------------
-initialize_run                     
-read_num                           
-DownstreamProgramName              
------------------------------------
-read_num                           
-update_num                         
 DownstreamDataName                 
 -----------------------------------
 output_csv_file                    
@@ -92,7 +80,6 @@ evolve_log
 UpstreamDateName                   
 -----------------------------------
 input_csv_file                     
-log_file_name                      
 data_name                          
 -----------------------------------
 output_csv_file                    
@@ -100,4 +87,3 @@ evolve_log
 data_name                          
 -----------------------------------
 input_csv_file                     
-log_file_name                      

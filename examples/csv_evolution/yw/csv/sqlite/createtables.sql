@@ -80,15 +80,6 @@ CREATE TABLE reconfacts_log_variable_value (
 );
 .import ../reconfacts_log_variable_value.csv reconfacts_log_variable_value
 
--- FACT: resource_metadat(resource_id, variable_name, uri_variable_value, port_id)
--- Resource R with uri variable U named N with value V passed through Port P.
-CREATE TABLE resource_metadata AS select reconfacts_data_resource.resource_id, modelfacts_uri_variable.variable_name, reconfacts_uri_variable_value.uri_variable_value, modelfacts_uri_variable.port_id from modelfacts_uri_variable, reconfacts_data_resource, reconfacts_uri_variable_value, modelfacts_channel, modelfacts_port_connects_to_channel where reconfacts_data_resource.data_id=modelfacts_channel.data_id and modelfacts_channel.channel_id=modelfacts_port_connects_to_channel.channel_id and modelfacts_port_connects_to_channel.port_id=modelfacts_uri_variable.port_id and modelfacts_uri_variable.uri_variable_id=reconfacts_uri_variable_value.uri_variable_id and reconfacts_uri_variable_value.resource_id=reconfacts_data_resource.resource_id;
-
-
-
-
-
-
 -- table rules created for queries
 -- RULE: annotation_qualifies_full(qualifying_annotation_id, primary_annotation_id, source_id, line_number, keyword, value)
 CREATE TABLE annotation_qualifies_full AS
@@ -203,6 +194,67 @@ CREATE TABLE data_upstream AS
     SELECT dd2, dd1
     FROM data_downstream;
 
+
+-- RULE: resource_metadata(resource_id, variable_name, uri_variable_value, port_id)
+-- Resource R with uri variable U named N with value V passed through Port P.
+CREATE TABLE resource_metadata AS
+    SELECT reconfacts_data_resource.resource_id, modelfacts_uri_variable.variable_name, reconfacts_uri_variable_value.uri_variable_value, modelfacts_uri_variable.port_id
+    FROM modelfacts_uri_variable, reconfacts_data_resource, reconfacts_uri_variable_value, modelfacts_channel, modelfacts_port_connects_to_channel
+    WHERE reconfacts_data_resource.data_id=modelfacts_channel.data_id AND modelfacts_channel.channel_id=modelfacts_port_connects_to_channel.channel_id AND modelfacts_port_connects_to_channel.port_id=modelfacts_uri_variable.port_id AND modelfacts_uri_variable.uri_variable_id=reconfacts_uri_variable_value.uri_variable_id AND reconfacts_uri_variable_value.resource_id=reconfacts_data_resource.resource_id;
+
+
+-- RULE: written_resource_metadata(resource_id, variable_name, uri_variable_value)
+-- Resource R was written with a metadata variable named N with value V.
+CREATE TABLE  written_resource_metadata AS
+    SELECT resource_id, variable_name, uri_variable_value
+    FROM resource_metadata, modelfacts_has_out_port
+    WHERE modelfacts_has_out_port.port_id=resource_metadata.port_id;
+
+
+-- RULE: read_resource_metadata(resource_id, variable_name, uri_variable_value)
+-- Resource R was read with a metadata variable named N with value V.
+CREATE TABLE read_resource_metadata AS
+    SELECT resource_id, variable_name, uri_variable_value
+    FROM resource_metadata, modelfacts_has_in_port
+    WHERE modelfacts_has_in_port.port_id=resource_metadata.port_id;
+
+
+-- RULE: common_metadata_variable(resource_id1, resource_id2)
+-- Resources R1 and R2 have metadata variables with shared name N.
+CREATE TABLE common_metadata_variable AS
+    SELECT r1.resource_id AS resource_id1, r2.resource_id AS resource_id2
+    FROM resource_metadata AS r1, resource_metadata AS r2
+    WHERE r1.variable_name=r2.variable_name AND r1.resource_id!=r2.resource_id;
+
+
+-- RULE: common_metadata_values_differ(resource_id1, resource_id2)
+-- Resources R1 and R2 have metadata variables with shared name N but different values V1 and V2.
+CREATE TABLE common_metadata_values_differ AS
+    SELECT r1.resource_id AS resource_id1, r2.resource_id AS resource_id2
+    FROM resource_metadata AS r1, resource_metadata AS r2
+    WHERE r1.variable_name=r2.variable_name AND r1.resource_id!=r2.resource_id AND r1.uri_variable_value!=r2.uri_variable_value;
+
+
+-- RULE: resource_upstream(R1, R2)
+CREATE TABLE resource_upstream AS
+    SELECT DISTINCT r1.resource_id AS R1, r2.resource_id AS R2
+    FROM reconfacts_data_resource AS r1, reconfacts_data_resource AS r2, data_upstream
+    WHERE data_upstream.dd2=r1.data_id and data_upstream.dd1=r2.data_id;
+
+
+-- RULE: resource_downstream(R2, R1)
+--  Resource R1 is downstream of resource R2.
+CREATE TABLE resource_downstream AS
+    SELECT R2, R1
+    FROM resource_upstream;
+
+
+-- RULE: depends_on(R1, R2)
+-- Resource R1 depends on resource R2.
+CREATE TABLE depends_on AS
+    SELECT R2, R1
+    FROM resource_downstream, common_metadata_variable, common_metadata_values_differ
+    WHERE resource_downstream.R2=common_metadata_variable.resource_id1 AND common_metadata_values_differ.resource_id1=common_metadata_variable.resource_id1 AND resource_downstream.R1=common_metadata_variable.resource_id2 AND common_metadata_values_differ.resource_id2=common_metadata_variable.resource_id2 AND R2!=R1;
 
 
 -- RULE: log_template_variable_name(log_template_id, port_id, entry_template, log_variable_id, variable_name, log_annotation_id)

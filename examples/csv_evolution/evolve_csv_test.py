@@ -20,10 +20,21 @@ def evolve_csv():
     iteration_count = 0
     evolve_log = open(log_file_name,'w')
     
+    """
+    @begin initialize_run @desc Create the run log file
+    @out evolve_log @uri file:evolve_log.txt
+    @out log_file_name
+    """
+    evolve_log.write(timestamp("Start the workflow.\n"))
+    """
+    @end initialize_run
+    """
+    
     for i in range (1, 10):
         """
         @begin read_num @desc Read number from input file into variable 'num'
         @in input_csv_file @uri file:original_data.csv
+        @in log_file_name
         @out num_old @as num
             @desc number before updating
         """
